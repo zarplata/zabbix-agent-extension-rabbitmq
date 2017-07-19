@@ -276,6 +276,16 @@ func getNodeMetrics(
 			strconv.Itoa(nodeInfo.MemUsed),
 		),
 	)
+	metrics = append(
+		metrics,
+		zsend.NewMetric(
+			hostname,
+			makePrefix(
+				"memory_alarm",
+			),
+			strconv.FormatBool(nodeInfo.MemAlarm),
+		),
+	)
 
 	return metrics
 }
