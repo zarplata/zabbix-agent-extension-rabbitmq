@@ -1,5 +1,6 @@
 .out/
 pkg/
 src/
-vendor/src
+vendor/*
+*.tar.xz
 
