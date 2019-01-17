@@ -3,9 +3,4 @@ pkg/
 src/
 vendor/*
 *.tar.xz
-
-package/archlinux/*.tar.xz
-package/archlinux/vendor
-package/archlinux/pkg
-package/archlinux/src
-package/archlinux/zabbix-agent-extension-rabbitmq
+zabbix-agent-extension-rabbitmq/
