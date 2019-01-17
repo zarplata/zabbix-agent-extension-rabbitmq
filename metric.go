@@ -10,7 +10,7 @@ import (
 
 func makePrefix(key string) string {
 	return fmt.Sprintf(
-		"ngs.srv.rabbitmq.%s", key,
+		"rabbitmq.%s", key,
 	)
 }
 
