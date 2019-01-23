@@ -7,6 +7,7 @@ This extension for monitoring RabbitMQ in standalone or cluster mode.
   - The `zabbix_sender` is no longer needed
   - Auto discovery all queues (LLD)
   - Triggers on discovered queues
+  - Configurable triggers of queue max capacity by macro
  
 #### This extension provides following information about each RabbitMQ queue:
   
@@ -28,3 +29,29 @@ This extension for monitoring RabbitMQ in standalone or cluster mode.
   they always move back to queue. It's not always a bad situation but for us, it means a problem with messages or consumer.
   - `zero deliver rate when queue not empty` - I think this is also a bad situation when you have some messages in the queue 
   but have not anyone consumer for handle that messages
+
+## Installation
+
+#### ArchLinux package
+
+```sh
+git clone https://github.com/zarplata/zabbix-agent-extension-rabbitmq.git
+cd zabbix-agent-extension-rabbitmq
+./build-archlinux.sh
+sudo pacman -U *.tar.xz --noconfirm
+systemctl restart zabbix-agent
+```
+
+#### From source
+
+```sh
+git clone https://github.com/zarplata/zabbix-agent-extension-rabbitmq.git
+cd zabbix-agent-extension-rabbitmq
+make
+
+sudo cp .out/zabbix-agent-extension-rabbitmq /usr/bin/
+sudo cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.conf.d/
+systemctl restart zabbix-agent
+```
+
+For both installation you also should import `template_app_rabbitmq_service.xml` template into Zabbix server
