@@ -68,3 +68,8 @@ systemctl restart zabbix-agent
 If you have cluster you should known that each metric of queue will be the same on each node, so you will receive so many alerts, how many nodes you have in the cluster because extension should be installed on all nodes. To avoid this behave and have only one alert and have only one aggregate metric this extension use feature of Zabbix server - `aggregate checks` https://www.zabbix.com/documentation/3.4/manual/config/items/itemtypes/aggregate
 
 So, you should create special host group in your Zabbix server, for example - `rabbitmq_aggregate` and add each node to this group, then you can add macro to one of cluster node (don't add macro on each node!!!) - `{$GROUPNAME} = rabbitmq_aggregate`, after that you can see new items and triggers only on node with defined macro.
+
+#### Customizable trigger
+
+You can customize `Too much messages in {#QUEUENAME}` trigger, by setting a message threshold for each queue.
+By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"mysuperqueue"} => 100` set threshold `100` for `mysuperqueue`.
