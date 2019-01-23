@@ -13,10 +13,10 @@ import (
 var version = "[manual build]"
 
 func main() {
-	usage := `zabbix-extension-rabbitmq
+	usage := `zabbix-agent-extension-rabbitmq
 
 Usage:
-    zabbix-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-z <host>] [-p <number>] [-d [-g <name>]]
+    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-z <host>] [-p <number>] [-d [-g <name>]]
 
 RabbitMQ options:
     -r --rabbitmq <address>          Listen address of rabbitmq server [default: 127.0.0.1:15672]
