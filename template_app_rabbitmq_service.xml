@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-01-23T09:00:29Z</date>
+    <date>2019-01-23T09:11:42Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -1357,6 +1357,22 @@
         </template>
     </templates>
     <triggers>
+        <trigger>
+            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP}].regexp(OK)}=0</expression>
+            <recovery_mode>0</recovery_mode>
+            <recovery_expression/>
+            <name>Can't obtain RabbitMQ stats</name>
+            <correlation_mode>0</correlation_mode>
+            <correlation_tag/>
+            <url/>
+            <status>0</status>
+            <priority>4</priority>
+            <description/>
+            <type>0</type>
+            <manual_close>0</manual_close>
+            <dependencies/>
+            <tags/>
+        </trigger>
         <trigger>
             <expression>{Template App Rabbitmq Service:rabbitmq.memory_alarm.avg(#3)}&lt;&gt;0</expression>
             <recovery_mode>0</recovery_mode>
