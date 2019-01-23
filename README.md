@@ -54,4 +54,17 @@ sudo cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.conf.d/
 systemctl restart zabbix-agent
 ```
 
-For both installation you also should import `template_app_rabbitmq_service.xml` template into Zabbix server
+**Be note!**
+  - You should add a global macros (Administration -> General -> Macros) - `{$ZABBIX_SERVER_IP}` with your Zabbix server IP. 
+  - For both installation you also should import `template_app_rabbitmq_service.xml` template into Zabbix server.
+  - Zabbix agent extensible directory path depends on Linux distribution and can be mismatch with the directory in this manual
+  
+  
+## Configuration
+
+
+#### Cluster specificity
+
+If you have cluster you should known that each metric of queue will be the same on each node, so you will receive so many alerts, how many nodes you have in the cluster because extension should be installes on all nodes. To avoid this behave and have only one alert and have only one aggregate metric this extension use feature of Zabbix server - `aggregate checks` https://www.zabbix.com/documentation/3.4/manual/config/items/itemtypes/aggregate
+
+So, you should create special host group in your Zabbix server, for example - `rabbitmq_aggregate` and add each node to this group, then you can add macro to one of cluster node (don't add macro on each node!!!) - `{$GROUPNAME} = rabbitmq_aggregate`, after that you can see new items and triggers only on node with defined macro.
