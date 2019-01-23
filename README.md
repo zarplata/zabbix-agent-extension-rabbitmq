@@ -55,7 +55,7 @@ systemctl restart zabbix-agent
 ```
 
 **Be note!**
-  - You should add a global macros (Administration -> General -> Macros) - `{$ZABBIX_SERVER_IP}` with your Zabbix server IP. 
+  - You should add a global macro (Administration -> General -> Macros) - `{$ZABBIX_SERVER_IP}` with your Zabbix server IP. 
   - For both installation you also should import `template_app_rabbitmq_service.xml` template into Zabbix server.
   - Zabbix agent extensible directory path depends on Linux distribution and can be mismatch with the directory in this manual
   
