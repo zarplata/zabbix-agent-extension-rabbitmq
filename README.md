@@ -73,3 +73,4 @@ So, you should create special host group in your Zabbix server, for example - `r
 
 You can customize `Too much messages in {#QUEUENAME}` trigger, by setting a message threshold for each queue.
 By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"mysuperqueue"} => 100` set threshold `100` for `mysuperqueue`.
+This feature (User macro context) is described in this section - https://www.zabbix.com/documentation/3.4/manual/config/macros/usermacros
