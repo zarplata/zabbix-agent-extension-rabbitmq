@@ -54,7 +54,7 @@ sudo cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.conf.d/
 systemctl restart zabbix-agent
 ```
 
-#### Fron source: CentOS 7
+#### From source: CentOS 7
 ```sh
 yum install go -y
 export GOPATH="/usr/lib/golang"
