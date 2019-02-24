@@ -54,6 +54,22 @@ sudo cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.conf.d/
 systemctl restart zabbix-agent
 ```
 
+#### From source: CentOS 7
+```sh
+yum install go -y
+export GOPATH="/usr/lib/golang"
+export GOBIN="/usr/lib/golang/bin/"
+export PATH=$PATH:$GOBIN
+curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+cd /usr/lib/golang/src
+git clone https://github.com/zarplata/zabbix-agent-extension-rabbitmq.git
+cd zabbix-agent-extension-rabbitmq/
+make
+cp .out/zabbix-agent-extension-rabbitmq /usr/bin/
+cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.d/
+systemctl restart zabbix-agent.service
+```
+
 **Be note!**
   - You should add a global macro (Administration -> General -> Macros) - `{$ZABBIX_SERVER_IP}` with your Zabbix server IP. 
   - For both installation you also should import `template_app_rabbitmq_service.xml` template into Zabbix server.
