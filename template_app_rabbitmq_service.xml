@@ -446,7 +446,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP}]</key>
+                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
                     <delay>30</delay>
                     <history>90d</history>
                     <trends>0</trends>
@@ -489,7 +489,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.discovery[{$GROUPNAME}]</key>
+                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
                     <delay>30</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -1350,6 +1350,14 @@
                 <macro>
                     <macro>{$RABBITMQ_PORT}</macro>
                     <value>5672</value>
+                </macro>
+                <macro>
+                    <macro>{$RABBITMQ_USER}</macro>
+                    <value>guest</value>
+                </macro>
+                <macro>
+                    <macro>{$RABBITMQ_PASSWORD}</macro>
+                    <value>guest</value>
                 </macro>
             </macros>
             <templates/>
