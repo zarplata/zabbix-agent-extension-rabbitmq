@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-01-23T09:11:42Z</date>
+    <date>2019-03-06T14:44:21Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -1348,15 +1348,15 @@
                     <value>1000000</value>
                 </macro>
                 <macro>
+                    <macro>{$RABBITMQ_PASSWORD}</macro>
+                    <value>guest</value>
+                </macro>
+                <macro>
                     <macro>{$RABBITMQ_PORT}</macro>
                     <value>5672</value>
                 </macro>
                 <macro>
                     <macro>{$RABBITMQ_USER}</macro>
-                    <value>guest</value>
-                </macro>
-                <macro>
-                    <macro>{$RABBITMQ_PASSWORD}</macro>
                     <value>guest</value>
                 </macro>
             </macros>
@@ -1366,7 +1366,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP}].regexp(OK)}=0</expression>
+            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}].regexp(OK)}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>Can't obtain RabbitMQ stats</name>
