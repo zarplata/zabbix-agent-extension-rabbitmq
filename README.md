@@ -29,6 +29,15 @@ This extension for monitoring RabbitMQ in standalone or cluster mode.
   they always move back to queue. It's not always a bad situation but for us, it means a problem with messages or consumer.
   - `zero deliver rate when queue not empty` - I think this is also a bad situation when you have some messages in the queue 
   but have not anyone consumer for handle that messages
+  
+## Dependencies
+
+  - Enabled RabbitMQ management plugin [https://www.rabbitmq.com/management.html](https://www.rabbitmq.com/management.html)
+  
+## Make dependencies
+
+  - Golang (please refer to your Linux distribution documentation for Golang installation)
+  - Golang dependency management tool [https://github.com/golang/dep](https://github.com/golang/dep)
 
 ## Installation
 
@@ -78,6 +87,20 @@ systemctl restart zabbix-agent.service
   
 ## Configuration
 
+#### Macros
+
+  - `{$RABBITMQ_PORT}` - RabbitMQ server port [default: 5672]
+  - `{$RABBITMQ_MGMT_ADDRESS}` - RabbitMQ management address [default: 127.0.0.1:15672]
+  - `{$RABBITMQ_USER}` - RabbitMQ management username [default: guest] [http://www.rabbitmq.com/access-control.html#loopback-users](http://www.rabbitmq.com/access-control.html#loopback-users)
+  - `{RABBITMQ_PASSWORD}` - RabbitMQ management user password [default: guest] [http://www.rabbitmq.com/access-control.html#loopback-users](http://www.rabbitmq.com/access-control.html#loopback-users)
+  - `{$MAX_MESSAGES}` - Max numbers of messages for all queues [default: 1000000] For customize various values for different queues see description below.
+
+#### Customizable trigger
+
+You can customize `Too much messages in {#QUEUENAME}` trigger, by setting a message threshold for each queue.
+By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"mysuperqueue"} => 100` set threshold `100` for `mysuperqueue`.
+This feature (User macro context) is described in this section - https://www.zabbix.com/documentation/3.4/manual/config/macros/usermacros
+
 
 #### Cluster specificity
 
@@ -85,8 +108,3 @@ If you have cluster you should known that each metric of queue will be the same 
 
 So, you should create special host group in your Zabbix server, for example - `rabbitmq_aggregate` and add each node to this group, then you can add macro to one of cluster node (don't add macro on each node!!!) - `{$GROUPNAME} = rabbitmq_aggregate`, after that you can see new items and triggers only on node with defined macro.
 
-#### Customizable trigger
-
-You can customize `Too much messages in {#QUEUENAME}` trigger, by setting a message threshold for each queue.
-By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"mysuperqueue"} => 100` set threshold `100` for `mysuperqueue`.
-This feature (User macro context) is described in this section - https://www.zabbix.com/documentation/3.4/manual/config/macros/usermacros
