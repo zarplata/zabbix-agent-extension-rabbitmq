@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-03-06T14:44:21Z</date>
+    <date>2019-03-09T15:07:41Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -72,7 +72,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>proc.num[rabbitmq-server]</key>
+                    <key>proc.num[,,,rabbitmq_server]</key>
                     <delay>30</delay>
                     <history>90d</history>
                     <trends>365d</trends>
@@ -446,7 +446,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
+                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
                     <delay>30</delay>
                     <history>90d</history>
                     <trends>0</trends>
@@ -489,7 +489,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
+                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
                     <delay>30</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -1348,6 +1348,10 @@
                     <value>1000000</value>
                 </macro>
                 <macro>
+                    <macro>{$RABBITMQ_MGMT_ADDRESS}</macro>
+                    <value>127.0.0.1:15672</value>
+                </macro>
+                <macro>
                     <macro>{$RABBITMQ_PASSWORD}</macro>
                     <value>guest</value>
                 </macro>
@@ -1366,7 +1370,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}].regexp(OK)}=0</expression>
+            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}].regexp(OK)}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>Can't obtain RabbitMQ stats</name>
@@ -1398,7 +1402,7 @@
             <tags/>
         </trigger>
         <trigger>
-            <expression>{Template App Rabbitmq Service:proc.num[rabbitmq-server].max(#3)}=0  and {Template App Rabbitmq Service:net.tcp.service[tcp,,{$RABBITMQ_PORT}].max(#3)}=0</expression>
+            <expression>{Template App Rabbitmq Service:proc.num[,,,rabbitmq_server].max(#3)}=0  or {Template App Rabbitmq Service:net.tcp.service[tcp,,{$RABBITMQ_PORT}].max(#3)}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>RabbitMQ process is NOT running</name>
