@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-03-09T15:07:41Z</date>
+    <date>2019-03-11T04:24:12Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -446,7 +446,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
+                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
                     <delay>30</delay>
                     <history>90d</history>
                     <trends>0</trends>
@@ -1348,8 +1348,12 @@
                     <value>1000000</value>
                 </macro>
                 <macro>
+                    <macro>{$RABBITMQ_CA_PATH}</macro>
+                    <value>None</value>
+                </macro>
+                <macro>
                     <macro>{$RABBITMQ_MGMT_ADDRESS}</macro>
-                    <value>127.0.0.1:15672</value>
+                    <value>http://127.0.0.1:15672</value>
                 </macro>
                 <macro>
                     <macro>{$RABBITMQ_PASSWORD}</macro>
@@ -1370,7 +1374,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}].regexp(OK)}=0</expression>
+            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}].regexp(OK)}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>Can't obtain RabbitMQ stats</name>

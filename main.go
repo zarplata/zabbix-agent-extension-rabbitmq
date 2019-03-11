@@ -10,22 +10,26 @@ import (
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 )
 
-var version = "[manual build]"
+var (
+	version   = "[manual build]"
+	noneValue = "None"
+)
 
 func main() {
 	usage := `zabbix-agent-extension-rabbitmq
 
 Usage:
-    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-z <host>] [-p <number>] [-d [-g <name>]]
+    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-d [-g <name>]]
 
 RabbitMQ options:
-    -r --rabbitmq <address>          Listen address of rabbitmq server [default: 127.0.0.1:15672]
-    -u --rabbitmq-user <name>        Rabbitmq management username [default: guest]
-    -s --rabbitmq-secret <password>  Rabbitmq management password [default: guest]
+	-r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
+    -u --rabbitmq-user <name>        RabbitMQ management username [default: guest]
+    -s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
+	-c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
 
 Zabbix options:
-    -z --zabbix <host>         Hostname or IP address of zabbix server [default: 127.0.0.1]
-    -p --zabbix-port <number>  Port of zabbix server [default: 10051]
+    -z --zabbix <host>         Hostname or IP address of Zabbix server [default: 127.0.0.1]
+    -p --zabbix-port <number>  Port of Zabbix server [default: 10051]
 	-d --discovery             Run low-level discovery for determine queues, exchanges, etc.
 	-g --group <name>          Group name which will be use for aggregate item values.[default: None]
 
@@ -33,6 +37,11 @@ Misc options:
     -h --help                  Show this screen.
 	-v --version               Show version.
 `
+
+	var (
+		rmqc *rabbithole.Client
+		err  error
+	)
 
 	args, _ := docopt.Parse(usage, nil, true, version, false)
 
@@ -53,10 +62,11 @@ Misc options:
 		os.Exit(1)
 	}
 
-	rmqc, err := rabbithole.NewClient(
-		fmt.Sprintf("http://%s", args["--rabbitmq"].(string)),
+	rmqc, err = makeRabbitMQClient(
+		parseDSN(args["--rabbitmq"].(string)),
 		args["--rabbitmq-user"].(string),
 		args["--rabbitmq-secret"].(string),
+		args["--ca"].(string),
 	)
 	if err != nil {
 		fmt.Println(err.Error())
