@@ -489,7 +489,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD}]</key>
+                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
                     <delay>30</delay>
                     <status>0</status>
                     <allowed_hosts/>
