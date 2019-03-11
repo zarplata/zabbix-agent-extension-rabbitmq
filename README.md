@@ -90,7 +90,8 @@ systemctl restart zabbix-agent.service
 #### Macros
 
   - `{$RABBITMQ_PORT}` - RabbitMQ server port [default: 5672]
-  - `{$RABBITMQ_MGMT_ADDRESS}` - RabbitMQ management address [default: 127.0.0.1:15672]
+  - `{$RABBITMQ_MGMT_ADDRESS}` - RabbitMQ management address [default: http://127.0.0.1:15672]
+  - `{$RABBITMQ_CA_PATH}` - Path to custom CA. It may use if RabbitMQ runs management plugin over HTTPS with self-signed certificate.
   - `{$RABBITMQ_USER}` - RabbitMQ management username [default: guest] [http://www.rabbitmq.com/access-control.html#loopback-users](http://www.rabbitmq.com/access-control.html#loopback-users)
   - `{RABBITMQ_PASSWORD}` - RabbitMQ management user password [default: guest] [http://www.rabbitmq.com/access-control.html#loopback-users](http://www.rabbitmq.com/access-control.html#loopback-users)
   - `{$MAX_MESSAGES}` - Max numbers of messages for all queues [default: 1000000] For customize various values for different queues see description below.
