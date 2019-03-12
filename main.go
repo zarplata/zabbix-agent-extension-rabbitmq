@@ -19,7 +19,7 @@ func main() {
 	usage := `zabbix-agent-extension-rabbitmq
 
 Usage:
-    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-d [-g <name>]]
+    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-d [-g <name>] [-a]]
 
 RabbitMQ options:
 	-r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
@@ -31,6 +31,7 @@ Zabbix options:
     -z --zabbix <host>         Hostname or IP address of Zabbix server [default: 127.0.0.1]
     -p --zabbix-port <number>  Port of Zabbix server [default: 10051]
 	-d --discovery             Run low-level discovery for determine queues, exchanges, etc.
+	-a --aggregate             Discovery aggregate items.
 	-g --group <name>          Group name which will be use for aggregate item values.[default: None]
 
 Misc options:
@@ -95,7 +96,12 @@ Misc options:
 
 	if args["--discovery"].(bool) {
 
-		err = discovery(rmqc, queues, aggGroup)
+		err = discovery(
+			rmqc,
+			queues,
+			aggGroup,
+			args["--aggregate"].(bool),
+		)
 		if err != nil {
 			fmt.Println(err.Error())
 			os.Exit(1)

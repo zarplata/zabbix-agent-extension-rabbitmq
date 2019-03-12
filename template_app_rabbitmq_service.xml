@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-03-11T04:24:12Z</date>
+    <date>2019-03-12T05:04:56Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -485,11 +485,11 @@
             </items>
             <discovery_rules>
                 <discovery_rule>
-                    <name>Rabbitmq discovery</name>
+                    <name>Rabbitmq aggregate discovery</name>
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.discovery[{$GROUPNAME},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
+                    <key>rabbitmq.aggregate.discovery[{$GROUPNAME},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
                     <delay>30</delay>
                     <status>0</status>
                     <allowed_hosts/>
@@ -511,7 +511,14 @@
                     <filter>
                         <evaltype>0</evaltype>
                         <formula/>
-                        <conditions/>
+                        <conditions>
+                            <condition>
+                                <macro>{#GROUPNAME}</macro>
+                                <value>^(?!None)</value>
+                                <operator>8</operator>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
                     </filter>
                     <lifetime>0</lifetime>
                     <description/>
@@ -696,6 +703,93 @@
                             <application_prototypes/>
                             <master_item_prototype/>
                         </item_prototype>
+                    </item_prototypes>
+                    <trigger_prototypes>
+                        <trigger_prototype>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGQUEUENAME}]&quot;,last,0].min(30m)}&lt;&gt;0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Redeliver rate in {#AGGQUEUENAME} is not null last 30 minutes</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#5)}&gt;{$MAX_MESSAGES:&quot;{#AGGQUEUENAME}&quot;}</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Too much messages in {#AGGQUEUENAME}</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>2</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                        <trigger_prototype>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#10)}&gt;0 and {Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGQUEUENAME}]&quot;,last,0].max(#10)}=0</expression>
+                            <recovery_mode>0</recovery_mode>
+                            <recovery_expression/>
+                            <name>Zero rate of delivery in {#AGGQUEUENAME}</name>
+                            <correlation_mode>0</correlation_mode>
+                            <correlation_tag/>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description/>
+                            <type>0</type>
+                            <manual_close>0</manual_close>
+                            <dependencies/>
+                            <tags/>
+                        </trigger_prototype>
+                    </trigger_prototypes>
+                    <graph_prototypes/>
+                    <host_prototypes/>
+                    <jmx_endpoint/>
+                </discovery_rule>
+                <discovery_rule>
+                    <name>Rabbitmq queue discovery</name>
+                    <type>0</type>
+                    <snmp_community/>
+                    <snmp_oid/>
+                    <key>rabbitmq.discovery[{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
+                    <delay>50</delay>
+                    <status>0</status>
+                    <allowed_hosts/>
+                    <snmpv3_contextname/>
+                    <snmpv3_securityname/>
+                    <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                    <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                    <snmpv3_authpassphrase/>
+                    <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                    <snmpv3_privpassphrase/>
+                    <params/>
+                    <ipmi_sensor/>
+                    <authtype>0</authtype>
+                    <username/>
+                    <password/>
+                    <publickey/>
+                    <privatekey/>
+                    <port/>
+                    <filter>
+                        <evaltype>0</evaltype>
+                        <formula/>
+                        <conditions/>
+                    </filter>
+                    <lifetime>0</lifetime>
+                    <description/>
+                    <item_prototypes>
                         <item_prototype>
                             <name>Queue {#QUEUENAME} consumers</name>
                             <type>2</type>
@@ -1278,56 +1372,7 @@
                             <master_item_prototype/>
                         </item_prototype>
                     </item_prototypes>
-                    <trigger_prototypes>
-                        <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGQUEUENAME}]&quot;,last,0].min(30m)}&lt;&gt;0</expression>
-                            <recovery_mode>0</recovery_mode>
-                            <recovery_expression/>
-                            <name>Redeliver rate in {#AGGQUEUENAME} is not null last 30 minutes</name>
-                            <correlation_mode>0</correlation_mode>
-                            <correlation_tag/>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                            <manual_close>0</manual_close>
-                            <dependencies/>
-                            <tags/>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#5)}&gt;{$MAX_MESSAGES:&quot;{#AGGQUEUENAME}&quot;}</expression>
-                            <recovery_mode>0</recovery_mode>
-                            <recovery_expression/>
-                            <name>Too much messages in {#AGGQUEUENAME}</name>
-                            <correlation_mode>0</correlation_mode>
-                            <correlation_tag/>
-                            <url/>
-                            <status>0</status>
-                            <priority>2</priority>
-                            <description/>
-                            <type>0</type>
-                            <manual_close>0</manual_close>
-                            <dependencies/>
-                            <tags/>
-                        </trigger_prototype>
-                        <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#10)}&gt;0 and {Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGQUEUENAME}]&quot;,last,0].max(#10)}=0</expression>
-                            <recovery_mode>0</recovery_mode>
-                            <recovery_expression/>
-                            <name>Zero rate of delivery in {#AGGQUEUENAME}</name>
-                            <correlation_mode>0</correlation_mode>
-                            <correlation_tag/>
-                            <url/>
-                            <status>0</status>
-                            <priority>4</priority>
-                            <description/>
-                            <type>0</type>
-                            <manual_close>0</manual_close>
-                            <dependencies/>
-                            <tags/>
-                        </trigger_prototype>
-                    </trigger_prototypes>
+                    <trigger_prototypes/>
                     <graph_prototypes/>
                     <host_prototypes/>
                     <jmx_endpoint/>

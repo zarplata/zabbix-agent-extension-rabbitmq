@@ -11,6 +11,7 @@ func discovery(
 	rmqc *rabbithole.Client,
 	queues []rabbithole.QueueInfo,
 	aggGroup string,
+	aggregate bool,
 ) error {
 	discoveryData := make(map[string][]map[string]string)
 
@@ -18,17 +19,17 @@ func discovery(
 
 	for _, queue := range queues {
 		discoveredItem := make(map[string]string)
-		discoveredItem["{#QUEUENAME}"] = queue.Name
 
-		if aggGroup != "None" {
+		if aggregate {
 
-			aggregateItem := make(map[string]string)
-			aggregateItem["{#GROUPNAME}"] = aggGroup
-			aggregateItem["{#AGGQUEUENAME}"] = queue.Name
+			discoveredItem["{#GROUPNAME}"] = aggGroup
+			discoveredItem["{#AGGQUEUENAME}"] = queue.Name
+			discoveredItems = append(discoveredItems, discoveredItem)
 
-			discoveredItems = append(discoveredItems, aggregateItem)
+			continue
 		}
 
+		discoveredItem["{#QUEUENAME}"] = queue.Name
 		discoveredItems = append(discoveredItems, discoveredItem)
 	}
 
