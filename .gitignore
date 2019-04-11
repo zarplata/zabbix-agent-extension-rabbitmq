@@ -4,3 +4,4 @@ src/
 vendor/*
 *.tar.xz
 zabbix-agent-extension-rabbitmq/
+./zabbix-agent-extension-rabbitmq
