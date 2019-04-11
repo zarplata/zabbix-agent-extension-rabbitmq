@@ -22,21 +22,21 @@ Usage:
     zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-d [-g <name>] [-a]]
 
 RabbitMQ options:
-	-r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
+    -r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
     -u --rabbitmq-user <name>        RabbitMQ management username [default: guest]
     -s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
-	-c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
+    -c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
 
 Zabbix options:
-    -z --zabbix <host>         Hostname or IP address of Zabbix server [default: 127.0.0.1]
-    -p --zabbix-port <number>  Port of Zabbix server [default: 10051]
-	-d --discovery             Run low-level discovery for determine queues, exchanges, etc.
-	-a --aggregate             Discovery aggregate items.
-	-g --group <name>          Group name which will be use for aggregate item values.[default: None]
+    -z --zabbix <host>               Hostname or IP address of Zabbix server [default: 127.0.0.1]
+    -p --zabbix-port <number>        Port of Zabbix server [default: 10051]
+    -d --discovery                   Run low-level discovery for determine queues, exchanges, etc.
+    -a --aggregate                   Discovery aggregate items.
+    -g --group <name>                Group name which will be use for aggregate item values.[default: None]
 
 Misc options:
-    -h --help                  Show this screen.
-	-v --version               Show version.
+    -h --help                        Show this screen.
+    -v --version                     Show version.
 `
 
 	var (
@@ -74,10 +74,23 @@ Misc options:
 		os.Exit(1)
 	}
 
-	queues, err := rmqc.ListQueues()
+	availableVhosts, err := rmqc.ListVhosts()
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
+	}
+
+	allQueues := make(map[string][]rabbithole.QueueInfo)
+
+	for _, vhost := range availableVhosts {
+
+		existsQueues, err := rmqc.ListQueuesIn(vhost.Name)
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+
+		allQueues[vhost.Name] = existsQueues
 	}
 
 	overview, err := rmqc.Overview()
@@ -98,7 +111,7 @@ Misc options:
 
 		err = discovery(
 			rmqc,
-			queues,
+			allQueues,
 			aggGroup,
 			args["--aggregate"].(bool),
 		)
@@ -111,7 +124,7 @@ Misc options:
 
 	metrics = getQueuesMetrics(
 		hostname,
-		queues,
+		allQueues,
 		metrics,
 	)
 

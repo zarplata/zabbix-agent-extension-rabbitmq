@@ -9,7 +9,7 @@ import (
 
 func discovery(
 	rmqc *rabbithole.Client,
-	queues []rabbithole.QueueInfo,
+	allQueues map[string][]rabbithole.QueueInfo,
 	aggGroup string,
 	aggregate bool,
 ) error {
@@ -17,20 +17,26 @@ func discovery(
 
 	var discoveredItems []map[string]string
 
-	for _, queue := range queues {
-		discoveredItem := make(map[string]string)
+	for vhost, queues := range allQueues {
 
-		if aggregate {
+		for _, queue := range queues {
+			discoveredItem := make(map[string]string)
+			if aggregate {
 
-			discoveredItem["{#GROUPNAME}"] = aggGroup
-			discoveredItem["{#AGGQUEUENAME}"] = queue.Name
+				discoveredItem["{#GROUPNAME}"] = aggGroup
+				discoveredItem["{#AGGQUEUENAME}"] = queue.Name
+				discoveredItem["{#AGGVHOST}"] = vhost
+
+				discoveredItems = append(discoveredItems, discoveredItem)
+
+				continue
+			}
+
+			discoveredItem["{#QUEUENAME}"] = queue.Name
+			discoveredItem["{#VHOST}"] = vhost
+
 			discoveredItems = append(discoveredItems, discoveredItem)
-
-			continue
 		}
-
-		discoveredItem["{#QUEUENAME}"] = queue.Name
-		discoveredItems = append(discoveredItems, discoveredItem)
 	}
 
 	discoveryData["data"] = discoveredItems

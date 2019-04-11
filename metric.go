@@ -75,176 +75,204 @@ func getOverview(
 
 func getQueuesMetrics(
 	hostname string,
-	queues []rabbithole.QueueInfo,
+	allQueues map[string][]rabbithole.QueueInfo,
 	metrics []*zsend.Metric,
 ) []*zsend.Metric {
 
-	for _, queue := range queues {
+	for vhost, queues := range allQueues {
+		for _, queue := range queues {
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf("queue.node[%s]", queue.Name),
-				),
-				queue.Node,
-			),
-		)
-
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf("queue.consumers[%s]", queue.Name),
-				),
-				strconv.Itoa(queue.Consumers),
-			),
-		)
-
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf("queue.memory_usage[%s]", queue.Name),
-				),
-				strconv.FormatInt(queue.Memory, 10),
-			),
-		)
-
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf("queue.messages[%s]", queue.Name),
-				),
-				strconv.Itoa(queue.Messages),
-			),
-		)
-
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf("queue.messages_ready[%s]", queue.Name),
-				),
-				strconv.Itoa(queue.MessagesReady),
-			),
-		)
-
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_unacknowledged[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf("queue.node[%s,%s]", vhost, queue.Name),
 					),
+					queue.Node,
 				),
-				strconv.Itoa(queue.MessagesUnacknowledged),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.publish[%s]", queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.consumers[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.Itoa(queue.Consumers),
 				),
-				strconv.FormatInt(queue.MessageStats.Publish, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.deliver[%s]", queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.memory_usage[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.FormatInt(queue.Memory, 10),
 				),
-				strconv.FormatInt(queue.MessageStats.Deliver, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.deliver_no_ack[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.Itoa(queue.Messages),
 				),
-				strconv.FormatInt(queue.MessageStats.DeliverNoAck, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.deliver_get[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_ready[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.Itoa(queue.MessagesReady),
 				),
-				strconv.FormatInt(queue.MessageStats.DeliverGet, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.redeliver[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_unacknowledged[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.Itoa(queue.MessagesUnacknowledged),
 				),
-				strconv.FormatInt(queue.MessageStats.Redeliver, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.get[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.publish[%s, %s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.FormatInt(queue.MessageStats.Publish, 10),
 				),
-				strconv.FormatInt(queue.MessageStats.Get, 10),
-			),
-		)
+			)
 
-		metrics = append(
-			metrics,
-			zsend.NewMetric(
-				hostname,
-				makePrefix(
-					fmt.Sprintf(
-						"queue.messages_stats.get_no_ack[%s]",
-						queue.Name,
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.deliver[%s,%s]",
+							vhost,
+							queue.Name,
+						),
 					),
+					strconv.FormatInt(queue.MessageStats.Deliver, 10),
 				),
-				strconv.FormatInt(queue.MessageStats.GetNoAck, 10),
-			),
-		)
+			)
+
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.deliver_no_ack[%s,%s]",
+							vhost,
+							queue.Name,
+						),
+					),
+					strconv.FormatInt(queue.MessageStats.DeliverNoAck, 10),
+				),
+			)
+
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.deliver_get[%s,%s]",
+							vhost,
+							queue.Name,
+						),
+					),
+					strconv.FormatInt(queue.MessageStats.DeliverGet, 10),
+				),
+			)
+
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.redeliver[%s,%s]",
+							vhost,
+							queue.Name,
+						),
+					),
+					strconv.FormatInt(queue.MessageStats.Redeliver, 10),
+				),
+			)
+
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.get[%s,%s]",
+							vhost,
+							queue.Name,
+						),
+					),
+					strconv.FormatInt(queue.MessageStats.Get, 10),
+				),
+			)
+
+			metrics = append(
+				metrics,
+				zsend.NewMetric(
+					hostname,
+					makePrefix(
+						fmt.Sprintf(
+							"queue.messages_stats.get_no_ack[%s,%s]",
+							vhost,
+							queue.Name,
+						),
+					),
+					strconv.FormatInt(queue.MessageStats.GetNoAck, 10),
+				),
+			)
+		}
 	}
 
 	return metrics
