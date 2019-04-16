@@ -5,7 +5,7 @@ This extension for monitoring RabbitMQ in standalone or cluster mode.
 
 ## Features
   - The `zabbix_sender` is no longer needed
-  - Auto discovery all queues (LLD)
+  - Auto discovery all queues in existing vhost's (LLD)
   - Triggers on discovered queues
   - Configurable triggers of queue max capacity by macro
  
@@ -99,7 +99,7 @@ systemctl restart zabbix-agent.service
 #### Customizable trigger
 
 You can customize `Too much messages in {#QUEUENAME}` trigger, by setting a message threshold for each queue.
-By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"mysuperqueue"} => 100` set threshold `100` for `mysuperqueue`.
+By default template has predefined macro `{$MAX_MESSAGES} => 1000000` so for each discovered queue will created trigger with a threshold - `1000000` if that value so big or so small you can change it or make separate macro only for interested queue for example - macro `{$MAX_MESSAGES:"/mysuperqueue"} => 100` set threshold `100` for `mysuperqueue` in `/`vhost, so for different vhost you should just change `/` to your vhost name, for example - `{$MAX_MESSAGES:"mycustomvhostmysuperqueue"} => 100` 
 This feature (User macro context) is described in this section - https://www.zabbix.com/documentation/3.4/manual/config/macros/usermacros
 
 
