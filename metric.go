@@ -174,7 +174,7 @@ func getQueuesMetrics(
 					hostname,
 					makePrefix(
 						fmt.Sprintf(
-							"queue.messages_stats.publish[%s, %s]",
+							"queue.messages_stats.publish[%s,%s]",
 							vhost,
 							queue.Name,
 						),

@@ -34,7 +34,7 @@ clean-deps:
 deps:
 	@echo Fetch dependencies
 	dep ensure -v
-
+	go install ./vendor/...
 
 remove:
 	@echo Remove

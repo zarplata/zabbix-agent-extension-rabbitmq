@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>3.4</version>
-    <date>2019-03-12T05:04:56Z</date>
+    <date>2019-04-16T15:29:35Z</date>
     <groups>
         <group>
             <name>Templates/Used</name>
@@ -524,11 +524,11 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Aggregate queue messages in {#AGGQUEUENAME}</name>
+                            <name>Aggregate queue messages in {#AGGQUEUENAME} of {#AGGVHOST} vhost</name>
                             <type>8</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0]</key>
+                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0]</key>
                             <delay>30</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -569,11 +569,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Aggregate queue {#AGGQUEUENAME} deliver rate</name>
+                            <name>Aggregate vhost {#AGGVHOST} queue {#AGGQUEUENAME} deliver rate</name>
                             <type>8</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGQUEUENAME}]&quot;,last,0]</key>
+                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0]</key>
                             <delay>30</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -614,11 +614,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Aggregate queue {#AGGQUEUENAME} publish rate</name>
+                            <name>Aggregate vhost {#AGGVHOST} queue {#AGGQUEUENAME} publish rate</name>
                             <type>8</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.publish[{#AGGQUEUENAME}]&quot;,last,0]</key>
+                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.publish[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0]</key>
                             <delay>30</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -659,11 +659,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Aggregate queue {#AGGQUEUENAME} redeliver rate</name>
+                            <name>Aggregate vhost {#AGGVHOST} queue {#AGGQUEUENAME} redeliver rate</name>
                             <type>8</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGQUEUENAME}]&quot;,last,0]</key>
+                            <key>grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0]</key>
                             <delay>30</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -706,10 +706,10 @@
                     </item_prototypes>
                     <trigger_prototypes>
                         <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGQUEUENAME}]&quot;,last,0].min(30m)}&lt;&gt;0</expression>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.redeliver[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0].min(30m)}&lt;&gt;0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Redeliver rate in {#AGGQUEUENAME} is not null last 30 minutes</name>
+                            <name>Redeliver rate in vhost {#AGGVHOST} queue {#AGGQUEUENAME} is not null last 30 minutes</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -722,10 +722,10 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#5)}&gt;{$MAX_MESSAGES:&quot;{#AGGQUEUENAME}&quot;}</expression>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0].min(#5)}&gt;{$MAX_MESSAGES:&quot;{#AGGVHOST}{#AGGQUEUENAME}&quot;}</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Too much messages in {#AGGQUEUENAME}</name>
+                            <name>Too much messages in vhost {#AGGVHOST} queue {#AGGQUEUENAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -738,10 +738,10 @@
                             <tags/>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGQUEUENAME}]&quot;,last,0].min(#10)}&gt;0 and {Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGQUEUENAME}]&quot;,last,0].max(#10)}=0</expression>
+                            <expression>{Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0].min(#10)}&gt;0 and {Template App Rabbitmq Service:grpavg[&quot;{#GROUPNAME}&quot;, &quot;rabbitmq.queue.messages_stats.deliver[{#AGGVHOST},{#AGGQUEUENAME}]&quot;,last,0].max(#10)}=0</expression>
                             <recovery_mode>0</recovery_mode>
                             <recovery_expression/>
-                            <name>Zero rate of delivery in {#AGGQUEUENAME}</name>
+                            <name>Zero rate of delivery in vhost {#AGGVHOST} queue {#AGGQUEUENAME}</name>
                             <correlation_mode>0</correlation_mode>
                             <correlation_tag/>
                             <url/>
@@ -791,11 +791,11 @@
                     <description/>
                     <item_prototypes>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} consumers</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} consumers</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.consumers[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.consumers[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -833,11 +833,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} memory usage</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} memory usage</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.memory_usage[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.memory_usage[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -875,11 +875,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -917,11 +917,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages ready</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages ready</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_ready[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_ready[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -959,11 +959,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages deliver rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages deliver rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.deliver[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.deliver[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1006,11 +1006,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages deliver_get rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages deliver_get rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.deliver_get[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.deliver_get[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1053,11 +1053,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages deliver_no_ack rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages deliver_no_ack rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.deliver_no_ack[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.deliver_no_ack[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1100,11 +1100,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages get rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages get rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.get[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.get[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1147,11 +1147,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages get_no_ack rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages get_no_ack rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.get_no_ack[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.get_no_ack[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1194,11 +1194,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages publish rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages publish rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.publish[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.publish[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1241,11 +1241,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages redeliver rate</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages redeliver rate</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_stats.redeliver[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_stats.redeliver[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1288,11 +1288,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} messages unacknowledged</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} messages unacknowledged</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.messages_unacknowledged[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.messages_unacknowledged[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1330,11 +1330,11 @@
                             <master_item_prototype/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Queue {#QUEUENAME} node</name>
+                            <name>Queue {#QUEUENAME} in vhost {#VHOST} node</name>
                             <type>2</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>rabbitmq.queue.node[{#QUEUENAME}]</key>
+                            <key>rabbitmq.queue.node[{#VHOST},{#QUEUENAME}]</key>
                             <delay>0</delay>
                             <history>90d</history>
                             <trends>0</trends>
