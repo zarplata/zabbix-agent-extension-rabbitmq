@@ -33,6 +33,7 @@ Zabbix options:
     -d --discovery                   Run low-level discovery for determine queues, exchanges, etc.
     -a --aggregate                   Discovery aggregate items.
     -g --group <name>                Group name which will be use for aggregate item values.[default: None]
+    -o --hostname <name>             Hostname which will be used in zabbix-sender protocol data. [default: ` + obtainHostname() + `
 
 Misc options:
     -h --help                        Show this screen.
@@ -57,11 +58,7 @@ Misc options:
 
 	var metrics []*zsend.Metric
 
-	hostname, err := os.Hostname()
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
+	hostname := args["--hostname"].(string)
 
 	rmqc, err = makeRabbitMQClient(
 		parseDSN(args["--rabbitmq"].(string)),

@@ -446,7 +446,7 @@
                     <type>0</type>
                     <snmp_community/>
                     <snmp_oid/>
-                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}]</key>
+                    <key>rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH},{HOST.HOST}]</key>
                     <delay>30</delay>
                     <history>90d</history>
                     <trends>0</trends>
@@ -1419,7 +1419,7 @@
     </templates>
     <triggers>
         <trigger>
-            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH}].regexp(OK)}=0</expression>
+            <expression>{Template App Rabbitmq Service:rabbitmq.stats[{$ZABBIX_SERVER_IP},{$RABBITMQ_MGMT_ADDRESS},{$RABBITMQ_USER},{$RABBITMQ_PASSWORD},{$RABBITMQ_CA_PATH},{HOST.HOST}].regexp(OK)}=0</expression>
             <recovery_mode>0</recovery_mode>
             <recovery_expression/>
             <name>Can't obtain RabbitMQ stats</name>

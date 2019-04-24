@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
@@ -22,6 +23,15 @@ func parseDSN(rawDSN string) string {
 	}
 
 	return DSN
+}
+
+func obtainHostname() string {
+	hostname, err := os.Hostname()
+	if err != nil {
+		panic(err)
+	}
+
+	return hostname
 }
 
 func makeRabbitMQClient(
