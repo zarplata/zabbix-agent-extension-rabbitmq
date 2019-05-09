@@ -24,8 +24,8 @@ Usage:
 RabbitMQ options:
     -r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
     -u --rabbitmq-user <name>        RabbitMQ management username [default: guest]
-	-s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
-	-t --rabbitmq-timeout <timeout>  RabbitMQ request timeout in ms [default: 5000]
+    -s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
+    -t --rabbitmq-timeout <timeout>  RabbitMQ request timeout in ms [default: 5000]
     -c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
 
 Zabbix options:
