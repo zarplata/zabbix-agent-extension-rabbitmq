@@ -19,7 +19,7 @@ func main() {
 	usage := `zabbix-agent-extension-rabbitmq
 
 Usage:
-    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-o <name>] [-t <timeout>] [-d [-g <name>] [-a]]
+    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-t <timeout>] [-c <path>] [-z <host>] [-p <number>] [-o <name>] [-d [-g <name>] [-a]]
 
 RabbitMQ options:
     -r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
