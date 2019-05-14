@@ -33,7 +33,7 @@ Zabbix options:
     -d --discovery                   Run low-level discovery for determine queues, exchanges, etc.
     -a --aggregate                   Discovery aggregate items.
     -g --group <name>                Group name which will be use for aggregate item values.[default: None]
-    -o --hostname <name>             Hostname which will be used in zabbix-sender protocol data. [default: ` + obtainHostname() + `
+    -o --hostname <name>             Hostname which will be used in zabbix-sender protocol data. [default: ` + obtainHostname() + `]
 
 Misc options:
     -h --help                        Show this screen.
