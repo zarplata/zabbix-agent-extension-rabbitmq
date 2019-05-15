@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	zsend "github.com/blacked/go-zabbix"
 	docopt "github.com/docopt/docopt-go"
@@ -25,7 +26,7 @@ RabbitMQ options:
     -r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
     -u --rabbitmq-user <name>        RabbitMQ management username [default: guest]
     -s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
-    -t --rabbitmq-timeout <timeout>  RabbitMQ request timeout in ms [default: 5000]
+    -t --rabbitmq-timeout <timeout>  RabbitMQ request timeout in ms [default: 5000ms]
     -c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
 
 Zabbix options:
@@ -57,7 +58,7 @@ Misc options:
 		os.Exit(1)
 	}
 
-	rmqTimeout, err := strconv.Atoi(args["--rabbitmq-timeout"].(string))
+	rmqTimeout, err := time.ParseDuration(args["--rabbitmq-timeout"].(string))
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)

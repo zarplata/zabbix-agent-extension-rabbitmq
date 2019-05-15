@@ -40,7 +40,7 @@ func makeRabbitMQClient(
 	username string,
 	password string,
 	caPath string,
-	timeout int,
+	timeout time.Duration,
 ) (*rabbithole.Client, error) {
 	destiny := karma.Describe(
 		"method", "makeRabbitMQClient",
@@ -69,7 +69,7 @@ func makeRabbitMQClient(
 			)
 		}
 
-		rmqc.SetTimeout(time.Duration(timeout) * time.Millisecond)
+		rmqc.SetTimeout(timeout)
 
 		return rmqc, nil
 	}
@@ -127,7 +127,7 @@ func makeRabbitMQClient(
 
 	}
 
-	rmqc.SetTimeout(time.Duration(timeout) * time.Millisecond)
+	rmqc.SetTimeout(timeout)
 
 	return rmqc, nil
 }
