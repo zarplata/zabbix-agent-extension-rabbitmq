@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	rabbithole "github.com/michaelklishin/rabbit-hole"
 	"github.com/reconquest/karma-go"
@@ -39,6 +40,7 @@ func makeRabbitMQClient(
 	username string,
 	password string,
 	caPath string,
+	timeout time.Duration,
 ) (*rabbithole.Client, error) {
 	destiny := karma.Describe(
 		"method", "makeRabbitMQClient",
@@ -66,6 +68,8 @@ func makeRabbitMQClient(
 				"can't create RabbitMQ client",
 			)
 		}
+
+		rmqc.SetTimeout(timeout)
 
 		return rmqc, nil
 	}
@@ -122,6 +126,8 @@ func makeRabbitMQClient(
 		)
 
 	}
+
+	rmqc.SetTimeout(timeout)
 
 	return rmqc, nil
 }
