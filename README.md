@@ -36,8 +36,7 @@ This extension for monitoring RabbitMQ in standalone or cluster mode.
   
 ## Make dependencies
 
-  - Golang (please refer to your Linux distribution documentation for Golang installation)
-  - Golang dependency management tool [https://github.com/golang/dep](https://github.com/golang/dep)
+  - Golang >= 1.11 (please refer to your Linux distribution documentation for Golang installation)
 
 ## Installation
 
