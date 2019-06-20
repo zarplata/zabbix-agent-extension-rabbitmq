@@ -17,20 +17,11 @@ md5sums=(
 
 build() {
   	cd "$srcdir/$pkgname"
-
-    rm -rf "$srcdir/.go/src"
-    mkdir -p "$srcdir/.go/src/github.com/zarplata"
-
-    export GOPATH="$srcdir/.go"
-
-    mv "$srcdir/$pkgname" "$srcdir/.go/src/github.com/zarplata"
-    cd "$srcdir/.go/src/github.com/zarplata/$pkgname"
-
     make
 }
 
 package() {
-    cd "$srcdir/.go/src/github.com/zarplata/$pkgname"
+    cd "$srcdir/$pkgname"
     curr_dir=$(pwd)
 
     ZBX_INC_DIR=/etc/zabbix/zabbix_agentd.conf.d/
