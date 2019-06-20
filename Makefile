@@ -35,8 +35,3 @@ remove:
 	@echo Remove
 	rm /usr/bin/${BINARYNAME}
 	@echo Done
-
-.PHONY: archlinux-package
-archlinux-package:
-	@echo Build package
-	$(shell ./build-archlinux.sh)
