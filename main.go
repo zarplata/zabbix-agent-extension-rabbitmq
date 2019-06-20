@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	zsend "github.com/blacked/go-zabbix"
 	docopt "github.com/docopt/docopt-go"
@@ -19,12 +20,13 @@ func main() {
 	usage := `zabbix-agent-extension-rabbitmq
 
 Usage:
-    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-c <path>] [-z <host>] [-p <number>] [-o <name>] [-d [-g <name>] [-a]]
+    zabbix-agent-extension-rabbitmq [-r <address>] [-u <name>] [-s <password>] [-t <timeout>] [-c <path>] [-z <host>] [-p <number>] [-o <name>] [-d [-g <name>] [-a]]
 
 RabbitMQ options:
     -r --rabbitmq <address>          Listen address of RabbitMQ server [default: http://127.0.0.1:15672]
     -u --rabbitmq-user <name>        RabbitMQ management username [default: guest]
     -s --rabbitmq-secret <password>  RabbitMQ management password [default: guest]
+    -t --rabbitmq-timeout <timeout>  RabbitMQ request timeout in ms [default: 5000ms]
     -c --ca <path>                   Path to CA file. [default: ` + noneValue + `]
 
 Zabbix options:
@@ -33,7 +35,7 @@ Zabbix options:
     -d --discovery                   Run low-level discovery for determine queues, exchanges, etc.
     -a --aggregate                   Discovery aggregate items.
     -g --group <name>                Group name which will be use for aggregate item values.[default: None]
-    -o --hostname <name>             Hostname which will be used in zabbix-sender protocol data. [default: ` + obtainHostname() + `
+    -o --hostname <name>             Hostname which will be used in zabbix-sender protocol data. [default: ` + obtainHostname() + `]
 
 Misc options:
     -h --help                        Show this screen.
@@ -56,6 +58,12 @@ Misc options:
 		os.Exit(1)
 	}
 
+	rmqTimeout, err := time.ParseDuration(args["--rabbitmq-timeout"].(string))
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
 	var metrics []*zsend.Metric
 
 	hostname := args["--hostname"].(string)
@@ -65,6 +73,7 @@ Misc options:
 		args["--rabbitmq-user"].(string),
 		args["--rabbitmq-secret"].(string),
 		args["--ca"].(string),
+		rmqTimeout,
 	)
 	if err != nil {
 		fmt.Println(err.Error())
