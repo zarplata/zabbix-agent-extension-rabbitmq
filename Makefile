@@ -24,12 +24,12 @@ clean-all: clean-deps
 
 build:
 	@echo Build
-	GO11MODULE=on go build -v -o .out/${BINARYNAME} -ldflags ${LDFLAGS} *.go
+	GO111MODULE=on go build -v -o .out/${BINARYNAME} -ldflags ${LDFLAGS} *.go
 	@echo Done
 
 deps:
 	@echo Fetch dependencies
-	GO11MODULE=on go get
+	GO111MODULE=on go get
 
 remove:
 	@echo Remove
