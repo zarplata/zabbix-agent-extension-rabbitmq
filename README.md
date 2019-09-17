@@ -65,14 +65,22 @@ systemctl restart zabbix-agent
 #### From source: CentOS 7
 ```sh
 yum install go -y
-export GOPATH="/usr/lib/golang"
-export GOBIN="/usr/lib/golang/bin/"
-export PATH=$PATH:$GOBIN
-curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-cd /usr/lib/golang/src
+
+# Create directory for development
+mkdir -p /home/USERNAME/golang/{pkg,src,bin}
+# export GOPATH variable
+export GOPATH="/home/USERNAME/golang"
+export PATH=$PATH:$GOPATH/bin
+
+# Clone the repository
+cd /tmp/
 git clone https://github.com/zarplata/zabbix-agent-extension-rabbitmq.git
+
+# Build
 cd zabbix-agent-extension-rabbitmq/
 make
+
+# Install
 cp .out/zabbix-agent-extension-rabbitmq /usr/bin/
 cp zabbix-agent-extension-rabbitmq.conf /etc/zabbix/zabbix_agentd.d/
 systemctl restart zabbix-agent.service
